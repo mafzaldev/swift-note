@@ -4,7 +4,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import InputField from "./InputField";
+import InputField from "../components/InputField";
 import auth from "../services/FirebaseConfig";
 import { validateEmail, validatePassword } from "../services/Utils";
 import userStore from "../store/UserStore";

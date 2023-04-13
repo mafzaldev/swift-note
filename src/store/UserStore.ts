@@ -1,19 +1,19 @@
 import { create } from 'zustand'
 
 interface UserState {
-    isAuthorized: boolean
+    isAuthenticated: boolean
     email: string
     uid: string
-    setCredentials: (isAuthorized: boolean, email: string, uid: string) => void
+    setCredentials: (isAuthenticated: boolean, email: string, uid: string) => void
 }
 
 const userStore = create<UserState>()((set) => ({
     email: "",
     uid: "",
-    isAuthorized: false,
+    isAuthenticated: false,
     setCredentials: (isAuthorized: boolean, email: string, uid: string) => {
         set({
-            isAuthorized: isAuthorized,
+            isAuthenticated: isAuthorized,
             email: email,
             uid: uid
         });

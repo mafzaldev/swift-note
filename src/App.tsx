@@ -1,9 +1,11 @@
-import Authentication from "./components/Authentication";
-
+import Authentication from "./views/AuthenticationScreen";
+import NotesScreen from "./views/NotesScreen";
+import userStore from "./store/UserStore";
 function App() {
+  const { isAuthenticated } = userStore();
   return (
     <div className="App">
-      <Authentication />
+      {isAuthenticated ? <Authentication /> : <NotesScreen />}
     </div>
   );
 }
