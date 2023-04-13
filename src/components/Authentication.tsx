@@ -1,15 +1,71 @@
 import { useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import InputField from "./InputField";
-import useBearStore from "../store/UserStore";
+import auth from "../services/FirebaseConfig";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { validateEmail, validatePassword } from "../services/Utils";
+
 function Authentication() {
   const [formState, setFormState] = useState({
     email: "",
     password: "",
     isError: false,
+    isLoading: false,
+    isLoginMode: true,
   });
+
+  const handleButtonClick = () => {
+    if (
+      !validateEmail(formState.email) &&
+      !validatePassword(formState.password)
+    ) {
+      setFormState((values) => ({ ...values, isError: true }));
+      return;
+    }
+    formState.isLoginMode ? handleLogin() : handleSignUp();
+    setFormState((values) => ({ ...values, isError: false, isLoading: true }));
+  };
+
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, formState.email, formState.password)
+      .then((userCredential) => {
+        console.log(userCredential.user.uid);
+        setFormState((values) => ({ ...values, isLoading: false }));
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        setFormState((values) => ({ ...values, isLoading: false }));
+      });
+  };
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, formState.email, formState.password)
+      .then((userCredential) => {
+        console.log(userCredential.user.uid);
+        setFormState((values) => ({ ...values, isLoading: false }));
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+        setFormState((values) => ({ ...values, isLoading: false }));
+      });
+  };
 
   const handleChange = (event: any, value: string) => {
     setFormState((values) => ({ ...values, [event.target.name]: value }));
+  };
+
+  const handleFormState = () => {
+    setFormState((values) => ({
+      ...values,
+      isLoginMode: !values.isLoginMode,
+    }));
   };
 
   return (
@@ -20,7 +76,7 @@ function Authentication() {
           <InputField
             label={"email"}
             placeholder={"john@doe.com"}
-            errorText={"Enter correct email address"}
+            errorText={"Please enter correct email address!"}
             isError={formState.isError}
             value={formState.email}
             handleChange={handleChange}
@@ -28,21 +84,33 @@ function Authentication() {
           <InputField
             label={"password"}
             placeholder={"•••••••••"}
-            errorText={"Enter correct password"}
+            errorText={"Please enter correct password!"}
             isError={formState.isError}
             value={formState.password}
             handleChange={handleChange}
           />
           <button
             type="button"
-            className="text-black bg-[#52ffa8] hover:bg-[#52ffa8] focus:ring-2 focus:ring-white font-medium rounded-lg text-sm px-10 py-2.5 mr-2 mb-2"
+            onClick={handleButtonClick}
+            className="text-black bg-[#52ffa8] hover:bg-[#52ffa8] focus:ring-2 focus:ring-white font-medium rounded-lg text-sm px-14 py-2.5 mr-2 mb-2"
           >
-            Login
+            {formState.isLoading ? (
+              <AiOutlineLoading3Quarters size={20} className="animate-spin" />
+            ) : formState.isLoginMode ? (
+              "LogIn"
+            ) : (
+              "SignUp"
+            )}
           </button>
           <p className="text-sm text-gray-900 dark:text-white mt-2 mb-5">
-            Don't have account?{" "}
-            <span className="font-medium text-[#52ffa8] hover:underline cursor-pointer">
-              SignUp
+            {formState.isLoginMode
+              ? "Don't have account?"
+              : "Already have an account?"}{" "}
+            <span
+              onClick={handleFormState}
+              className="font-medium text-[#52ffa8] hover:underline cursor-pointer"
+            >
+              {formState.isLoginMode ? "SignUp" : "LogIn"}
             </span>
           </p>
         </form>

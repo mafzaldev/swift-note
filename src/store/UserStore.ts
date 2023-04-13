@@ -1,15 +1,23 @@
 import { create } from 'zustand'
 
 interface UserState {
+    isAuthorized: boolean
     email: string
-    authorized: boolean
-    authorize: (userState: boolean) => void
+    uid: string
+    setCredentials: (isAuthorized: boolean, email: string, uid: string) => void
 }
 
-const useBearStore = create<UserState>()((set) => ({
+const userStore = create<UserState>()((set) => ({
+    uid: "",
     email: "",
-    authorized: false,
-    authorize: (userState) => set(() => ({ authorized: userState })),
+    isAuthorized: false,
+    setCredentials: (isAuthorized: boolean, email: string, uid: string) => {
+        set({
+            isAuthorized: isAuthorized,
+            email: email,
+            uid: uid
+        });
+    }
 }))
 
-export default useBearStore;
+export default userStore;
