@@ -8,14 +8,9 @@
   font-family: "Inter", sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  /* color: rgba(255, 255, 255, 0.87); */
+  /* color: #52ffa8; */
   background-color: #1f2632;
-  /* background-color: hsl(217, 19%, 24%); */
-
-  color: hsl(150, 100%, 66%);
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -27,4 +22,9 @@
   .flexCenter {
     @apply flex items-center justify-center;
   }
+}
+
+.App {
+  background-image: url("./assets/dots.png");
+  background-size: contain;
 }

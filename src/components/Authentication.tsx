@@ -1,24 +1,37 @@
 import { useState } from "react";
 import InputField from "./InputField";
+import useBearStore from "../store/UserStore";
+function Authentication() {
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+    isError: false,
+  });
 
-function SignUp() {
-  const [isError, setIsError] = useState(false);
+  const handleChange = (event: any, value: string) => {
+    setFormState((values) => ({ ...values, [event.target.name]: value }));
+  };
+
   return (
     <div className="flexCenter h-screen">
-      <div className="flexCenter flex-col w-[28%] h-3/5 bg-[#323a49] my-20 rounded-lg">
+      <div className="flexCenter flex-col w-[95%] h-[70%] bg-[#323a49] my-20 rounded-lg lg:w-[28%] md:w-[65%]">
         <p className="text-4xl font-bold text-white mb-10 mt-5">Swift Note</p>
         <form className="flexCenter flex-col" action="">
           <InputField
-            label={"Email"}
+            label={"email"}
             placeholder={"john@doe.com"}
             errorText={"Enter correct email address"}
-            isError={isError}
+            isError={formState.isError}
+            value={formState.email}
+            handleChange={handleChange}
           />
           <InputField
-            label={"Password"}
+            label={"password"}
             placeholder={"•••••••••"}
             errorText={"Enter correct password"}
-            isError={isError}
+            isError={formState.isError}
+            value={formState.password}
+            handleChange={handleChange}
           />
           <button
             type="button"
@@ -26,7 +39,7 @@ function SignUp() {
           >
             Login
           </button>
-          <p className="text-sm text-gray-900 dark:text-white mt-2">
+          <p className="text-sm text-gray-900 dark:text-white mt-2 mb-5">
             Don't have account?{" "}
             <span className="font-medium text-[#52ffa8] hover:underline cursor-pointer">
               SignUp
@@ -38,4 +51,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Authentication;

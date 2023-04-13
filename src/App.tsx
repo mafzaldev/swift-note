@@ -1,10 +1,9 @@
-import { useState } from "react";
-import SignUp from "./components/SignUp";
+import Authentication from "./components/Authentication";
 
 function App() {
   return (
     <div className="App">
-      <SignUp />
+      <Authentication />
     </div>
   );
 }
