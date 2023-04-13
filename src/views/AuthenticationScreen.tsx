@@ -105,10 +105,14 @@ function Authentication() {
           <button
             type="button"
             onClick={handleButtonClick}
-            className="text-black bg-[#52ffa8] hover:bg-[#52ffa8] focus:ring-2 focus:ring-white font-medium rounded-lg text-sm px-14 py-2.5 mr-2 mb-2"
+            className="text-white bg-blue-500 hover:bg-blue-400 focus:ring-2 focus:ring-white font-medium rounded-lg text-sm px-14 py-2.5 mr-2 mb-2"
           >
             {formState.isLoading ? (
-              <AiOutlineLoading3Quarters size={20} className="animate-spin" />
+              <AiOutlineLoading3Quarters
+                color={"white"}
+                size={20}
+                className="animate-spin"
+              />
             ) : formState.isLoginMode ? (
               "LogIn"
             ) : (
@@ -121,7 +125,7 @@ function Authentication() {
               : "Already have an account?"}{" "}
             <span
               onClick={handleFormState}
-              className="font-medium text-[#52ffa8] hover:underline cursor-pointer"
+              className="font-medium text-blue-500 hover:underline cursor-pointer"
             >
               {formState.isLoginMode ? "SignUp" : "LogIn"}
             </span>

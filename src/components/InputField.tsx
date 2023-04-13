@@ -19,20 +19,20 @@ export default function InputField({
       >
         {label[0].toUpperCase() + label.slice(1)}
       </label>
+
       <input
         type="text"
         id={fieldId}
         name={label}
         value={value}
         onChange={(e) => handleChange(e, e.target.value)}
-        className={`border text-sm rounded-lg bg-gray-700 block w-full p-2.5 text-white-500 outline-none focus:ring-4 focus:ring-[#52ffa8]
+        className={`border text-sm rounded-lg bg-gray-700 block w-full p-2.5 text-white-500 outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50
         ${
           isError
-            ? `placeholder-red-500 border-red-500`
-            : `placeholder-white-500`
+            ? `placeholder-red-500 border-red-500 focus:ring-red-500`
+            : `placeholder-white-500 border-blue-500`
         }
-        placeholder-white-500
-        border-[#52ffa8]`}
+        placeholder-white-500`}
         placeholder={placeholder}
       />
 

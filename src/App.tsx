@@ -7,7 +7,8 @@ function App() {
   const { isAuthenticated } = userStore();
   return (
     <div className="App">
-      {isAuthenticated ? <NotesScreen /> : <Authentication />}
+      {/* {isAuthenticated ? <NotesScreen /> : <Authentication />} */}
+      <NotesScreen />
       <Toaster position="bottom-right" reverseOrder={false} />
     </div>
   );

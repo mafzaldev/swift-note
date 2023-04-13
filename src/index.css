@@ -11,6 +11,9 @@
   color-scheme: light dark;
   /* color: #52ffa8; */
   background-color: #1f2632;
+  background-image: url("./assets/dots.png");
+  background-size: contain;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -22,11 +25,6 @@
   .flexCenter {
     @apply flex items-center justify-center;
   }
-}
-
-.App {
-  background-image: url("./assets/dots.png");
-  background-size: contain;
 }
 
 .toast-font-size {
