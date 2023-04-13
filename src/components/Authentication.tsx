@@ -3,10 +3,11 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import InputField from "./InputField";
 import auth from "../services/FirebaseConfig";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { validateEmail, validatePassword } from "../services/Utils";
+import userStore from "../store/UserStore";
 
 function Authentication() {
   const [formState, setFormState] = useState({
@@ -17,17 +18,7 @@ function Authentication() {
     isLoginMode: true,
   });
 
-  const handleButtonClick = () => {
-    if (
-      !validateEmail(formState.email) &&
-      !validatePassword(formState.password)
-    ) {
-      setFormState((values) => ({ ...values, isError: true }));
-      return;
-    }
-    formState.isLoginMode ? handleLogin() : handleSignUp();
-    setFormState((values) => ({ ...values, isError: false, isLoading: true }));
-  };
+  const { setCredentials } = userStore();
 
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, formState.email, formState.password)
@@ -48,13 +39,32 @@ function Authentication() {
       .then((userCredential) => {
         console.log(userCredential.user.uid);
         setFormState((values) => ({ ...values, isLoading: false }));
+        setCredentials(
+          true,
+          userCredential.user.email!,
+          userCredential.user.uid
+        );
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+
         setFormState((values) => ({ ...values, isLoading: false }));
+        setCredentials(false, "", "");
       });
+  };
+
+  const handleButtonClick = () => {
+    if (
+      !validateEmail(formState.email) &&
+      !validatePassword(formState.password)
+    ) {
+      setFormState((values) => ({ ...values, isError: true }));
+      return;
+    }
+    formState.isLoginMode ? handleLogin() : handleSignUp();
+    setFormState((values) => ({ ...values, isError: false, isLoading: true }));
   };
 
   const handleChange = (event: any, value: string) => {

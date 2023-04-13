@@ -8,8 +8,8 @@ interface UserState {
 }
 
 const userStore = create<UserState>()((set) => ({
-    uid: "",
     email: "",
+    uid: "",
     isAuthorized: false,
     setCredentials: (isAuthorized: boolean, email: string, uid: string) => {
         set({
