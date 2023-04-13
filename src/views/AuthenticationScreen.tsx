@@ -4,6 +4,8 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import toast from "react-hot-toast";
+
 import InputField from "../components/InputField";
 import auth from "../services/FirebaseConfig";
 import { validateEmail, validatePassword } from "../services/Utils";
@@ -22,14 +24,15 @@ function Authentication() {
 
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, formState.email, formState.password)
-      .then((userCredential) => {
-        console.log(userCredential.user.uid);
+      .then(() => {
+        toast.success("SignedUp successfully !", {
+          className: "toast-font-size",
+        });
         setFormState((values) => ({ ...values, isLoading: false }));
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        toast.error(errorMessage, { className: "toast-font-size" });
         setFormState((values) => ({ ...values, isLoading: false }));
       });
   };
@@ -37,7 +40,9 @@ function Authentication() {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, formState.email, formState.password)
       .then((userCredential) => {
-        console.log(userCredential.user.uid);
+        toast.success("LoggedIn successfully !", {
+          className: "toast-font-size",
+        });
         setFormState((values) => ({ ...values, isLoading: false }));
         setCredentials(
           true,
@@ -46,10 +51,8 @@ function Authentication() {
         );
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-
+        toast.error(errorMessage, { className: "toast-font-size" });
         setFormState((values) => ({ ...values, isLoading: false }));
         setCredentials(false, "", "");
       });

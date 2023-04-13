@@ -28,3 +28,7 @@
   background-image: url("./assets/dots.png");
   background-size: contain;
 }
+
+.toast-font-size {
+  font-size: 0.8rem;
+}
