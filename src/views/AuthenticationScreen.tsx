@@ -25,7 +25,7 @@ function AuthenticationScreen() {
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, formState.email, formState.password)
       .then(() => {
-        toast.success("SignedUp successfully!", {
+        toast.success("SignedUp successfully. Now login again!", {
           className: "toast-font-size",
         });
         setFormState((values) => ({ ...values, isLoading: false }));
@@ -40,7 +40,7 @@ function AuthenticationScreen() {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, formState.email, formState.password)
       .then((userCredential) => {
-        toast.success("LoggedIn successfully !", {
+        toast.success("LoggedIn successfully!", {
           className: "toast-font-size",
         });
         setFormState((values) => ({ ...values, isLoading: false }));
