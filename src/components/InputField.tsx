@@ -6,11 +6,12 @@ export default function InputField({
   placeholder,
   isError,
   value,
+  width = 80,
   handleChange,
 }: InputField) {
   const fieldId = useId();
   return (
-    <div className="mb-6 w-80">
+    <div className={`mb-6 w-${width}`}>
       <label
         htmlFor={fieldId}
         className={`block mb-1 text-sm font-medium ${
@@ -51,5 +52,6 @@ interface InputField {
   errorText: string;
   placeholder: string;
   isError: boolean;
+  width?: number;
   handleChange: (event: any, value: string) => void;
 }

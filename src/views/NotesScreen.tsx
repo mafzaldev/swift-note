@@ -6,7 +6,10 @@ import Modal from "../components/Modal";
 
 function NotesScreen() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [modalOpen, setModalOpen] = useState(true);
+  const [modalOpen, setModalOpen] = useState({
+    modalOpen: false,
+    mode: "Create note",
+  });
 
   const handleChange = (value: string) => {
     setSearchTerm(value);
@@ -14,14 +17,23 @@ function NotesScreen() {
 
   return (
     <>
-      <Modal show={modalOpen} handleModal={() => setModalOpen(!modalOpen)} />
+      <Modal
+        mode={modalOpen.mode}
+        show={modalOpen.modalOpen}
+        handleModal={() =>
+          setModalOpen({
+            modalOpen: !modalOpen.modalOpen,
+            mode: modalOpen.mode,
+          })
+        }
+      />
       <div
-        onClick={() => setModalOpen(!modalOpen)}
-        className="flexCenter absolute bottom-10 right-10 bg-blue-500 w-16 h-16 p-4 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer"
+        onClick={() => setModalOpen({ modalOpen: true, mode: "Create note" })}
+        className="flexCenter fixed bottom-10 right-10 z-10 bg-blue-500 w-16 h-16 p-4 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer"
       >
         <AiOutlineFileAdd size={45} />
       </div>
-      <div className="flexCenter flex-col mx-10 mt-10 gap-3 lg:mx-32 sm:mx-16">
+      <div className="flexCenter flex-col mx-10 my-10 gap-3 lg:mx-32 sm:mx-16">
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
           Swift Note
         </h1>
@@ -31,34 +43,12 @@ function NotesScreen() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-4">
           <NoteCard
-            title="LoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsfl"
-            description="Loremskhahkfslfasdkjfdasfgadsfl"
+            title="LoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsfl"
+            description="LoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsfl "
             id="2"
-          />
-          <NoteCard
-            title="LoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsfl"
-            description="Loremskhahkfslfasdkjfdasfgadsfl"
-            id="2"
-          />
-          <NoteCard
-            title="LoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsfl"
-            description="Loremskhahkfslfasdkjfdasfgadsfl"
-            id="2"
-          />
-          <NoteCard
-            title="LoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsfl"
-            description="Loremskhahkfslfasdkjfdasfgadsfl"
-            id="2"
-          />
-          <NoteCard
-            title="LoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsfl"
-            description="Loremskhahkfslfasdkjfdasfgadsfl"
-            id="2"
-          />
-          <NoteCard
-            title="LoremskhahkfslfasdkjfdasfgadsflLoremskhahkfslfasdkjfdasfgadsfl"
-            description="Loremskhahkfslfasdkjfdasfgadsfl"
-            id="2"
+            handleEdit={() =>
+              setModalOpen({ modalOpen: true, mode: "Edit note" })
+            }
           />
         </div>
       </div>

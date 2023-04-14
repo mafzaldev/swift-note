@@ -4,12 +4,38 @@ import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import Backdrop from "./Backdrop";
 import ModalCloseButton from "./ModalCloseButton";
+import InputField from "./InputField";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import Button from "./Button";
 
-function ModalOverlay({ nodeRef, handleModal }: ModalOverlay) {
+function ModalOverlay({ mode, nodeRef, handleModal }: ModalOverlay) {
   const [formState, setFormState] = useState({
     title: "",
     description: "",
+    isError: false,
+    isLoading: false,
   });
+
+  const handleChange = (e: any) => {
+    setFormState((values) => ({
+      ...values,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    if (formState.title.length < 5 || formState.description.length < 15) {
+      setFormState((values) => ({
+        ...values,
+        isError: true,
+      }));
+    } else {
+      setFormState((values) => ({
+        ...values,
+        isLoading: true,
+      }));
+    }
+  };
 
   const content = (
     <div
@@ -21,81 +47,40 @@ function ModalOverlay({ nodeRef, handleModal }: ModalOverlay) {
           <ModalCloseButton handleModal={handleModal} />
           <div className="px-6 py-6 lg:px-8">
             <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-              Sign in to our platform
+              {mode}
             </h3>
-            <form className="space-y-6" action="#">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your email
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  placeholder="name@company.com"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Your password
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                  required
-                />
-              </div>
-              <div className="flex justify-between">
-                <div className="flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="remember"
-                      type="checkbox"
-                      value=""
-                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                      required
-                    />
-                  </div>
-                  <label
-                    htmlFor="remember"
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >
-                    Remember me
-                  </label>
-                </div>
-                <a
-                  href="#"
-                  className="text-sm text-blue-700 hover:underline dark:text-blue-500"
-                >
-                  Lost Password?
-                </a>
-              </div>
-              <button
-                type="submit"
-                className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
-                Login to your account
-              </button>
-              <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                Not registered?
-                <a
-                  href="#"
-                  className="text-blue-700 hover:underline dark:text-blue-500"
-                >
-                  Create account
-                </a>
-              </div>
+            <form className="flexCenter flex-col space-y-6">
+              <InputField
+                label={"title"}
+                placeholder={"NodeJS Course"}
+                errorText={"Please enter note title"}
+                isError={formState.isError}
+                value={formState.title}
+                width={80}
+                handleChange={handleChange}
+              />
+              <InputField
+                label={"description"}
+                placeholder={"NodeJS Course on Udemy"}
+                errorText={
+                  "Course description should be at least 15 characters long"
+                }
+                width={80}
+                isError={formState.isError}
+                value={formState.title}
+                handleChange={handleChange}
+              />
+              <Button handleButtonClick={handleSubmit}>
+                {formState.isLoading ? (
+                  <AiOutlineLoading3Quarters
+                    color={"white"}
+                    size={20}
+                    className="animate-spin"
+                  />
+                ) : (
+                  mode
+                )}
+              </Button>
             </form>
           </div>
         </div>
@@ -105,7 +90,7 @@ function ModalOverlay({ nodeRef, handleModal }: ModalOverlay) {
   return ReactDOM.createPortal(content, document.getElementById("modal")!);
 }
 
-function Modal({ show, handleModal }: Modal) {
+function Modal({ mode, show, handleModal }: Modal) {
   const nodeRef = useRef(null);
 
   return (
@@ -119,7 +104,7 @@ function Modal({ show, handleModal }: Modal) {
         timeout={200}
         classNames="modal"
       >
-        <ModalOverlay nodeRef={nodeRef} handleModal={handleModal} />
+        <ModalOverlay mode={mode} nodeRef={nodeRef} handleModal={handleModal} />
       </CSSTransition>
     </>
   );
@@ -129,10 +114,15 @@ export default Modal;
 
 interface Modal {
   show: boolean;
+  mode: string;
   handleModal: () => void;
 }
 
 interface ModalOverlay {
+  mode: string;
   handleModal: () => void;
   nodeRef: React.RefObject<HTMLDivElement>;
+}
+function handleButtonClick(event: any): void {
+  throw new Error("Function not implemented.");
 }
