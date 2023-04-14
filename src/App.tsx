@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import Authentication from "./views/AuthenticationScreen";
+import AuthenticationScreen from "./views/AuthenticationScreen";
 import NotesScreen from "./views/NotesScreen";
 import userStore from "./store/UserStore";
 
@@ -7,7 +7,7 @@ function App() {
   const { isAuthenticated } = userStore();
   return (
     <div className="App">
-      {/* {isAuthenticated ? <NotesScreen /> : <Authentication />} */}
+      {/* {isAuthenticated ? <NotesScreen /> : <AuthenticationScreen />} */}
       <NotesScreen />
       <Toaster position="bottom-right" reverseOrder={false} />
     </div>

@@ -11,7 +11,7 @@ import auth from "../services/FirebaseConfig";
 import { validateEmail, validatePassword } from "../services/Utils";
 import userStore from "../store/UserStore";
 
-function Authentication() {
+function AuthenticationScreen() {
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -136,4 +136,4 @@ function Authentication() {
   );
 }
 
-export default Authentication;
+export default AuthenticationScreen;
