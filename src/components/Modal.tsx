@@ -1,17 +1,32 @@
-import { useRef, useState } from "react";
 import ReactDOM from "react-dom";
-
+import { useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-hot-toast";
+
+import { db } from "../services/FirebaseConfig";
+import userStore from "../stores/UserStore";
+
 import Backdrop from "./Backdrop";
 import ModalCloseButton from "./ModalCloseButton";
 import InputField from "./InputField";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import Button from "./Button";
 
-function ModalOverlay({ mode, nodeRef, handleModal }: ModalOverlay) {
+function ModalOverlay({
+  id = "",
+  title = "",
+  description = "",
+  mode,
+  nodeRef,
+  handleModal,
+}: ModalOverlay) {
+  const { uid } = userStore();
+
   const [formState, setFormState] = useState({
-    title: "",
-    description: "",
+    title: title,
+    description: description,
     isError: false,
     isLoading: false,
   });
@@ -23,7 +38,33 @@ function ModalOverlay({ mode, nodeRef, handleModal }: ModalOverlay) {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleCreate = async () => {
+    const docId = uuidv4();
+    await setDoc(doc(db, uid, docId), {
+      uid: docId,
+      title: formState.title,
+      description: formState.description,
+    }).then(() => {
+      handleModal();
+      toast.success("Note created successfully!", {
+        className: "toast-font-size",
+      });
+    });
+  };
+
+  const handleEdit = async () => {
+    await updateDoc(doc(db, uid, id), {
+      title: formState.title,
+      description: formState.description,
+    }).then(() => {
+      handleModal();
+      toast.success("Note edited successfully!", {
+        className: "toast-font-size",
+      });
+    });
+  };
+
+  const handleSubmit = async () => {
     if (formState.title.length < 5 || formState.description.length < 15) {
       setFormState((values) => ({
         ...values,
@@ -33,6 +74,15 @@ function ModalOverlay({ mode, nodeRef, handleModal }: ModalOverlay) {
       setFormState((values) => ({
         ...values,
         isLoading: true,
+        isError: false,
+      }));
+      mode === "Create note" ? handleCreate() : handleEdit();
+      setFormState((values) => ({
+        ...values,
+        id: "",
+        title: "",
+        description: "",
+        isLoading: false,
       }));
     }
   };
@@ -67,7 +117,7 @@ function ModalOverlay({ mode, nodeRef, handleModal }: ModalOverlay) {
                 }
                 width={80}
                 isError={formState.isError}
-                value={formState.title}
+                value={formState.description}
                 handleChange={handleChange}
               />
               <Button handleButtonClick={handleSubmit}>
@@ -90,7 +140,14 @@ function ModalOverlay({ mode, nodeRef, handleModal }: ModalOverlay) {
   return ReactDOM.createPortal(content, document.getElementById("modal")!);
 }
 
-function Modal({ mode, show, handleModal }: Modal) {
+function Modal({
+  id = "",
+  title = "",
+  description = "",
+  mode,
+  show,
+  handleModal,
+}: Modal) {
   const nodeRef = useRef(null);
 
   return (
@@ -104,7 +161,14 @@ function Modal({ mode, show, handleModal }: Modal) {
         timeout={200}
         classNames="modal"
       >
-        <ModalOverlay mode={mode} nodeRef={nodeRef} handleModal={handleModal} />
+        <ModalOverlay
+          id={id}
+          title={title}
+          description={description}
+          mode={mode}
+          nodeRef={nodeRef}
+          handleModal={handleModal}
+        />
       </CSSTransition>
     </>
   );
@@ -113,16 +177,19 @@ function Modal({ mode, show, handleModal }: Modal) {
 export default Modal;
 
 interface Modal {
+  id?: string;
+  title?: string;
+  description?: string;
   show: boolean;
   mode: string;
   handleModal: () => void;
 }
 
 interface ModalOverlay {
+  id?: string;
+  title?: string;
+  description?: string;
   mode: string;
   handleModal: () => void;
   nodeRef: React.RefObject<HTMLDivElement>;
-}
-function handleButtonClick(event: any): void {
-  throw new Error("Function not implemented.");
 }

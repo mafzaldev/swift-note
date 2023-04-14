@@ -7,9 +7,9 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import toast from "react-hot-toast";
 
 import InputField from "../components/InputField";
-import auth from "../services/FirebaseConfig";
+import { auth } from "../services/FirebaseConfig";
 import { validateEmail, validatePassword } from "../services/Utils";
-import userStore from "../store/UserStore";
+import userStore from "../stores/UserStore";
 
 function AuthenticationScreen() {
   const [formState, setFormState] = useState({
@@ -25,7 +25,7 @@ function AuthenticationScreen() {
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, formState.email, formState.password)
       .then(() => {
-        toast.success("SignedUp successfully !", {
+        toast.success("SignedUp successfully!", {
           className: "toast-font-size",
         });
         setFormState((values) => ({ ...values, isLoading: false }));
