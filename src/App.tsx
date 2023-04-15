@@ -1,6 +1,6 @@
 import { Toaster } from "react-hot-toast";
-import AuthenticationScreen from "./views/AuthenticationScreen";
-import NotesScreen from "./views/NotesScreen";
+import AuthenticationScreen from "./screens/AuthenticationScreen";
+import NotesScreen from "./screens/NotesScreen";
 import userStore from "./stores/UserStore";
 
 function App() {
@@ -8,7 +8,6 @@ function App() {
   return (
     <div className="App">
       {isAuthenticated ? <NotesScreen /> : <AuthenticationScreen />}
-      {/* <NotesScreen /> */}
       <Toaster position="top-right" reverseOrder={false} />
     </div>
   );

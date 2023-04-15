@@ -7,6 +7,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import toast from "react-hot-toast";
 
 import InputField from "../components/InputField";
+import Button from "../components/Button";
 import { auth } from "../services/FirebaseConfig";
 import {
   validateEmail,
@@ -102,7 +103,7 @@ function AuthenticationScreen() {
   return (
     <>
       <div className="flexCenter h-screen">
-        <div className="flexCenter flex-col w-[95%] h-[70%] bg-[#323a49] my-20 rounded-lg lg:w-[28%] md:w-[65%]">
+        <div className="flexCenter flex-col w-[95%] h-[75%] bg-[#323a49] my-20 rounded-lg lg:w-[28%] md:w-[65%]">
           <p className="text-4xl font-bold text-white mb-10 mt-5">Swift Note</p>
           <form className="flexCenter flex-col" autoComplete="off">
             <InputField
@@ -121,11 +122,7 @@ function AuthenticationScreen() {
               value={formState.password}
               handleChange={handleChange}
             />
-            <button
-              type="button"
-              onClick={handleButtonClick}
-              className="text-white bg-blue-500 hover:bg-blue-400 focus:ring-2 focus:ring-white font-medium rounded-lg text-sm px-14 py-2.5 mr-2 mb-2"
-            >
+            <Button handleButtonClick={handleButtonClick}>
               {formState.isLoading ? (
                 <AiOutlineLoading3Quarters
                   color={"white"}
@@ -137,7 +134,7 @@ function AuthenticationScreen() {
               ) : (
                 "SignUp"
               )}
-            </button>
+            </Button>
             <p className="text-sm text-white mt-2 mb-5">
               {formState.isLoginMode
                 ? "Don't have account?"
@@ -151,6 +148,14 @@ function AuthenticationScreen() {
             </p>
           </form>
         </div>
+        <p className="absolute bottom-2">
+          Made with
+          <span className="text-blue-500"> ❤️ </span> by
+          <a href="https://github.com/mafzaldev/" className="hover:underline">
+            {" "}
+            @mafzaldev
+          </a>
+        </p>
       </div>
     </>
   );

@@ -1,4 +1,3 @@
-import React from "react";
 import Backdrop from "./Backdrop";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 

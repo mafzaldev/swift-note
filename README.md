@@ -6,6 +6,8 @@ Swift Note offers a range of features that make note-taking a breeze. Users can 
 
 Overall, Swift Note is an excellent option for anyone who needs a fast and reliable note-taking app that is both easy to use and highly customizable.
 
+Visit the live demo [here](https://swiftnote.netlify.app/).
+
 ## Technologies
 
 Swift Note is built using the following tools and technologies:
