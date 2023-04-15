@@ -86,12 +86,10 @@ function ModalOverlay({
       className="flexCenter fixed top-0 left-0 right-0 z-50 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full"
     >
       <div className="relative w-full max-w-md max-h-full">
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div className="relative rounded-lg shadow bg-gray-700">
           <ModalCloseButton handleModal={handleModal} />
           <div className="px-6 py-6 lg:px-8">
-            <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
-              {mode}
-            </h3>
+            <h3 className="mb-4 text-xl font-medium text-white">{mode}</h3>
             <form className="flexCenter flex-col space-y-6" autoComplete="off">
               <InputField
                 label={"title"}

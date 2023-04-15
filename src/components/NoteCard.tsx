@@ -27,7 +27,7 @@ function NoteCard({ id, title, description, handleEdit }: NoteCard) {
 
   return (
     <div className="relative block max-w-lg p-4 min-h-[105%] border rounded-lg shadow bg-gray-800 border-gray-700 hover:bg-gray-700 group">
-      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white h-8 text-ellipsis overflow-clip">
+      <h5 className="mb-2 text-2xl font-bold tracking-tight text-white h-8 text-ellipsis overflow-clip">
         {title}
       </h5>
       <div

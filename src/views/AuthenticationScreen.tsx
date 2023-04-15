@@ -138,7 +138,7 @@ function AuthenticationScreen() {
                 "SignUp"
               )}
             </button>
-            <p className="text-sm text-gray-900 dark:text-white mt-2 mb-5">
+            <p className="text-sm text-white mt-2 mb-5">
               {formState.isLoginMode
                 ? "Don't have account?"
                 : "Already have an account?"}{" "}
