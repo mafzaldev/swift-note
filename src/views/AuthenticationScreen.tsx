@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -8,10 +8,17 @@ import toast from "react-hot-toast";
 
 import InputField from "../components/InputField";
 import { auth } from "../services/FirebaseConfig";
-import { validateEmail, validatePassword } from "../services/Utils";
+import {
+  validateEmail,
+  validatePassword,
+  setLocalStorage,
+  getLocalStorage,
+} from "../services/Utils";
 import userStore from "../stores/UserStore";
 
 function AuthenticationScreen() {
+  const { setCredentials } = userStore();
+
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -19,8 +26,6 @@ function AuthenticationScreen() {
     isLoading: false,
     isLoginMode: true,
   });
-
-  const { setCredentials } = userStore();
 
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, formState.email, formState.password)
@@ -40,15 +45,20 @@ function AuthenticationScreen() {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, formState.email, formState.password)
       .then((userCredential) => {
+        setFormState((values) => ({ ...values, isLoading: false }));
         toast.success("LoggedIn successfully!", {
           className: "toast-font-size",
         });
-        setFormState((values) => ({ ...values, isLoading: false }));
         setCredentials(
           true,
           userCredential.user.email!,
           userCredential.user.uid
         );
+        setLocalStorage("userState", {
+          isAuthenticated: true,
+          email: userCredential.user.email!,
+          uid: userCredential.user.uid,
+        });
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -81,58 +91,68 @@ function AuthenticationScreen() {
     }));
   };
 
+  useEffect(() => {
+    const user = getLocalStorage("userState");
+    if (!user) return;
+
+    const { isAuthenticated, email, uid } = JSON.parse(user);
+    if (isAuthenticated) return setCredentials(isAuthenticated, email, uid);
+  }, []);
+
   return (
-    <div className="flexCenter h-screen">
-      <div className="flexCenter flex-col w-[95%] h-[70%] bg-[#323a49] my-20 rounded-lg lg:w-[28%] md:w-[65%]">
-        <p className="text-4xl font-bold text-white mb-10 mt-5">Swift Note</p>
-        <form className="flexCenter flex-col" autoComplete="off">
-          <InputField
-            label={"email"}
-            placeholder={"john@doe.com"}
-            errorText={"Please enter correct email address!"}
-            isError={formState.isError}
-            value={formState.email}
-            handleChange={handleChange}
-          />
-          <InputField
-            label={"password"}
-            placeholder={"•••••••••"}
-            errorText={"Please enter correct password!"}
-            isError={formState.isError}
-            value={formState.password}
-            handleChange={handleChange}
-          />
-          <button
-            type="button"
-            onClick={handleButtonClick}
-            className="text-white bg-blue-500 hover:bg-blue-400 focus:ring-2 focus:ring-white font-medium rounded-lg text-sm px-14 py-2.5 mr-2 mb-2"
-          >
-            {formState.isLoading ? (
-              <AiOutlineLoading3Quarters
-                color={"white"}
-                size={20}
-                className="animate-spin"
-              />
-            ) : formState.isLoginMode ? (
-              "LogIn"
-            ) : (
-              "SignUp"
-            )}
-          </button>
-          <p className="text-sm text-gray-900 dark:text-white mt-2 mb-5">
-            {formState.isLoginMode
-              ? "Don't have account?"
-              : "Already have an account?"}{" "}
-            <span
-              onClick={handleFormState}
-              className="font-medium text-blue-500 hover:underline cursor-pointer"
+    <>
+      <div className="flexCenter h-screen">
+        <div className="flexCenter flex-col w-[95%] h-[70%] bg-[#323a49] my-20 rounded-lg lg:w-[28%] md:w-[65%]">
+          <p className="text-4xl font-bold text-white mb-10 mt-5">Swift Note</p>
+          <form className="flexCenter flex-col" autoComplete="off">
+            <InputField
+              label={"email"}
+              placeholder={"john@doe.com"}
+              errorText={"Please enter correct email address!"}
+              isError={formState.isError}
+              value={formState.email}
+              handleChange={handleChange}
+            />
+            <InputField
+              label={"password"}
+              placeholder={"•••••••••"}
+              errorText={"Please enter correct password!"}
+              isError={formState.isError}
+              value={formState.password}
+              handleChange={handleChange}
+            />
+            <button
+              type="button"
+              onClick={handleButtonClick}
+              className="text-white bg-blue-500 hover:bg-blue-400 focus:ring-2 focus:ring-white font-medium rounded-lg text-sm px-14 py-2.5 mr-2 mb-2"
             >
-              {formState.isLoginMode ? "SignUp" : "LogIn"}
-            </span>
-          </p>
-        </form>
+              {formState.isLoading ? (
+                <AiOutlineLoading3Quarters
+                  color={"white"}
+                  size={20}
+                  className="animate-spin"
+                />
+              ) : formState.isLoginMode ? (
+                "LogIn"
+              ) : (
+                "SignUp"
+              )}
+            </button>
+            <p className="text-sm text-gray-900 dark:text-white mt-2 mb-5">
+              {formState.isLoginMode
+                ? "Don't have account?"
+                : "Already have an account?"}{" "}
+              <span
+                onClick={handleFormState}
+                className="font-medium text-blue-500 hover:underline cursor-pointer"
+              >
+                {formState.isLoginMode ? "SignUp" : "LogIn"}
+              </span>
+            </p>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

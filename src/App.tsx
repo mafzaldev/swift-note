@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       {isAuthenticated ? <NotesScreen /> : <AuthenticationScreen />}
       {/* <NotesScreen /> */}
-      <Toaster position="bottom-right" reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 }

@@ -9,4 +9,17 @@ const validatePassword = (password: string) => {
     return re.test(String(password));
 };
 
-export { validateEmail, validatePassword }
+const setLocalStorage = (key: string, value: any) => {
+    return window.localStorage.setItem(key, JSON.stringify(value));
+}
+
+const getLocalStorage = (key: string) => {
+    return window.localStorage.getItem(key)!;
+}
+
+const removeLocalStorage = (key: string) => {
+    return window.localStorage.removeItem(key);
+}
+
+
+export { validateEmail, validatePassword, setLocalStorage, getLocalStorage, removeLocalStorage }

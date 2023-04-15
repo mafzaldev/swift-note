@@ -1,31 +1,44 @@
 import { useEffect, useState } from "react";
-import { MdOutlineAddCircle } from "react-icons/md";
+import { MdOutlineAddCircle, MdOutlineLogout } from "react-icons/md";
 import { collection, query, onSnapshot } from "firebase/firestore";
 
 import NoteCard from "../components/NoteCard";
 import SearchField from "../components/SearchField";
 import Modal from "../components/Modal";
-import { db } from "../services/FirebaseConfig";
+import { auth, db } from "../services/FirebaseConfig";
 import { notesStore, Note } from "../stores/NotesStore";
 import userStore from "../stores/UserStore";
+import { removeLocalStorage } from "../services/Utils";
 
 function NotesScreen() {
   const { setNotes, allNotes } = notesStore();
-  const { uid } = userStore();
+  const { uid, setCredentials } = userStore();
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
   const [toBeEdited, setToBeEdited] = useState({
     id: "",
     title: "",
     description: "",
   });
-  const [modalOpen, setModalOpen] = useState({
-    modalOpen: false,
+  const [modal, setModal] = useState({
+    modalState: false,
     mode: "Create note",
   });
 
   const handleChange = (value: string) => {
     setSearchTerm(value);
+    const filteredNotes = allNotes.filter((note) => {
+      return note.title.toLowerCase().includes(value.toLowerCase());
+    });
+    setFilteredNotes(filteredNotes);
+  };
+
+  const handleLogout = () => {
+    auth.signOut().then(() => {
+      setCredentials(false, "", "");
+      removeLocalStorage("userState");
+    });
   };
 
   useEffect(() => {
@@ -51,21 +64,27 @@ function NotesScreen() {
         id={toBeEdited.id}
         title={toBeEdited.title}
         description={toBeEdited.description}
-        mode={modalOpen.mode}
-        show={modalOpen.modalOpen}
+        mode={modal.mode}
+        show={modal.modalState}
         handleModal={() =>
-          setModalOpen({
-            modalOpen: !modalOpen.modalOpen,
-            mode: modalOpen.mode,
+          setModal({
+            modalState: !modal.modalState,
+            mode: modal.mode,
           })
         }
       />
       <div
+        onClick={handleLogout}
+        className="flexCenter fixed top-2 right-2 z-10 bg-blue-500 w-10 h-10 p-3 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer sm:h-12 sm:w-12 sm:top-10 sm:right-10"
+      >
+        <MdOutlineLogout size={60} />
+      </div>
+      <div
         onClick={() => {
           setToBeEdited({ id: "", title: "", description: "" });
-          setModalOpen({ modalOpen: true, mode: "Create note" });
+          setModal({ modalState: true, mode: "Create note" });
         }}
-        className="flexCenter fixed bottom-10 right-10 z-10 bg-blue-500 w-16 h-16 p-4 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer"
+        className="flexCenter fixed z-10 bottom-5 right-5 bg-blue-500 w-16 h-16 p-4 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer sm:bottom-10 sm:right-10"
       >
         <MdOutlineAddCircle size={45} />
       </div>
@@ -78,18 +97,31 @@ function NotesScreen() {
         </form>
 
         <div className="grid grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-4">
-          {allNotes.map((note) => (
-            <NoteCard
-              key={note.uid}
-              id={note.uid}
-              title={note.title}
-              description={note.description}
-              handleEdit={(id, title, description) => {
-                setToBeEdited({ id, title, description });
-                setModalOpen({ modalOpen: true, mode: "Edit note" });
-              }}
-            />
-          ))}
+          {searchTerm === ""
+            ? allNotes.map((note) => (
+                <NoteCard
+                  key={note.uid}
+                  id={note.uid}
+                  title={note.title}
+                  description={note.description}
+                  handleEdit={(id, title, description) => {
+                    setToBeEdited({ id, title, description });
+                    setModal({ modalState: true, mode: "Edit note" });
+                  }}
+                />
+              ))
+            : filteredNotes.map((note) => (
+                <NoteCard
+                  key={note.uid}
+                  id={note.uid}
+                  title={note.title}
+                  description={note.description}
+                  handleEdit={(id, title, description) => {
+                    setToBeEdited({ id, title, description });
+                    setModal({ modalState: true, mode: "Edit note" });
+                  }}
+                />
+              ))}
         </div>
       </div>
     </>
