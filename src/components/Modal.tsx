@@ -99,7 +99,7 @@ function ModalOverlay({
             <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">
               {mode}
             </h3>
-            <form className="flexCenter flex-col space-y-6">
+            <form className="flexCenter flex-col space-y-6" autoComplete="off">
               <InputField
                 label={"title"}
                 placeholder={"NodeJS Course"}
@@ -118,6 +118,7 @@ function ModalOverlay({
                 width={80}
                 isError={formState.isError}
                 value={formState.description}
+                type="textarea"
                 handleChange={handleChange}
               />
               <Button handleButtonClick={handleSubmit}>

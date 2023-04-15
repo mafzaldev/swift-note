@@ -85,7 +85,7 @@ function AuthenticationScreen() {
     <div className="flexCenter h-screen">
       <div className="flexCenter flex-col w-[95%] h-[70%] bg-[#323a49] my-20 rounded-lg lg:w-[28%] md:w-[65%]">
         <p className="text-4xl font-bold text-white mb-10 mt-5">Swift Note</p>
-        <form className="flexCenter flex-col" action="">
+        <form className="flexCenter flex-col" autoComplete="off">
           <InputField
             label={"email"}
             placeholder={"john@doe.com"}
