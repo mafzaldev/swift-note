@@ -106,7 +106,6 @@ function ModalOverlay({
                 errorText={
                   "Course description should be at least 15 characters long"
                 }
-                width={80}
                 isError={formState.isError}
                 value={formState.description}
                 type="textarea"
