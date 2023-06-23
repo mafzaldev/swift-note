@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 
 import InputField from "../components/InputField";
 import Button from "../components/Button";
+
 import { auth } from "../services/FirebaseConfig";
 import {
   validateEmail,

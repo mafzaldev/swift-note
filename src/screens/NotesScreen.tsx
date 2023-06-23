@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-import { MdOutlineAddCircle, MdOutlineLogout } from "react-icons/md";
+import { MdOutlineNoteAdd } from "react-icons/md";
+import { HiOutlineLogout } from "react-icons/hi";
 import { collection, query, onSnapshot } from "firebase/firestore";
 
 import NoteCard from "../components/NoteCard";
 import SearchField from "../components/SearchField";
 import Modal from "../components/Modal";
+import NoteDetails from "../components/NoteDetails";
+
+import userStore from "../stores/UserStore";
 import { auth, db } from "../services/FirebaseConfig";
 import { notesStore, Note } from "../stores/NotesStore";
-import userStore from "../stores/UserStore";
 import { removeLocalStorage } from "../services/Utils";
 
 function NotesScreen() {
@@ -16,11 +19,14 @@ function NotesScreen() {
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);
+  const [detailsModal, setDetailsModal] = useState(false);
+
   const [toBeEdited, setToBeEdited] = useState({
     id: "",
     title: "",
     description: "",
   });
+
   const [modal, setModal] = useState({
     modalState: false,
     mode: "Create note",
@@ -73,11 +79,20 @@ function NotesScreen() {
           })
         }
       />
+      <NoteDetails
+        id={toBeEdited.id}
+        title={toBeEdited.title}
+        description={toBeEdited.description}
+        show={detailsModal}
+        handleModal={() => {
+          setDetailsModal(!detailsModal);
+        }}
+      />
       <div
         onClick={handleLogout}
         className="flexCenter fixed top-2 right-2 z-10 bg-blue-500 w-10 h-10 p-3 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer sm:h-12 sm:w-12 sm:top-10 sm:right-10"
       >
-        <MdOutlineLogout size={60} />
+        <HiOutlineLogout size={60} />
       </div>
       <div
         onClick={() => {
@@ -86,7 +101,7 @@ function NotesScreen() {
         }}
         className="flexCenter fixed z-10 bottom-5 right-5 bg-blue-500 w-16 h-16 p-4 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer sm:bottom-10 sm:right-10"
       >
-        <MdOutlineAddCircle size={45} />
+        <MdOutlineNoteAdd size={45} />
       </div>
       <div className="flexCenter flex-col mx-10 my-10 gap-3 lg:mx-32 sm:mx-16">
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -104,7 +119,13 @@ function NotesScreen() {
                   id={note.uid}
                   title={note.title}
                   description={note.description}
+                  handleView={(id, title, description) => {
+                    console.log("handleView");
+                    setToBeEdited({ id, title, description });
+                    setDetailsModal(!detailsModal);
+                  }}
                   handleEdit={(id, title, description) => {
+                    console.log("handleEdit");
                     setToBeEdited({ id, title, description });
                     setModal({ modalState: true, mode: "Edit note" });
                   }}
@@ -116,7 +137,13 @@ function NotesScreen() {
                   id={note.uid}
                   title={note.title}
                   description={note.description}
+                  handleView={(id, title, description) => {
+                    console.log("handleView");
+                    setToBeEdited({ id, title, description });
+                    setDetailsModal(!detailsModal);
+                  }}
                   handleEdit={(id, title, description) => {
+                    console.log("handleEdit");
                     setToBeEdited({ id, title, description });
                     setModal({ modalState: true, mode: "Edit note" });
                   }}
