@@ -22,11 +22,16 @@ interface NoteDetailsOverlay {
 }
 
 function NoteDetailsOverlay({
-  title = "",
-  description = "",
+  title,
+  description,
   nodeRef,
   handleModal,
 }: NoteDetailsOverlay) {
+  const renderedDescription = () => {
+    const lines = description!.split("\n");
+    return lines.map((line, index) => <div key={index}>{line}</div>);
+  };
+
   const content = (
     <div
       ref={nodeRef}
@@ -37,7 +42,7 @@ function NoteDetailsOverlay({
           <ModalCloseButton handleModal={handleModal} />
           <div className="px-6 py-6 lg:px-8">
             <h2 className="mb-4 text-2xl font-bold text-white">{title}</h2>
-            <p>{description}</p>
+            <p>{renderedDescription()}</p>
           </div>
         </div>
       </div>

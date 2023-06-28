@@ -90,7 +90,7 @@ function NotesScreen() {
       />
       <div
         onClick={handleLogout}
-        className="flexCenter fixed top-2 right-2 z-10 bg-blue-500 w-10 h-10 p-3 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer sm:h-12 sm:w-12 sm:top-10 sm:right-10"
+        className="flexCenter fixed top-2 right-2 z-10 bg-blue-500 w-12 h-12 p-3 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer sm:h-12 sm:w-12 sm:top-10 sm:right-10"
       >
         <HiOutlineLogout size={60} />
       </div>
@@ -99,7 +99,7 @@ function NotesScreen() {
           setToBeEdited({ id: "", title: "", description: "" });
           setModal({ modalState: true, mode: "Create note" });
         }}
-        className="flexCenter fixed z-10 bottom-5 right-5 bg-blue-500 w-16 h-16 p-4 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer sm:bottom-10 sm:right-10"
+        className="flexCenter fixed z-10 bottom-5 right-2 bg-blue-500 w-16 h-16 p-4 rounded-[50%] hover:translate-y-1 transition-all cursor-pointer sm:bottom-10 sm:right-10"
       >
         <MdOutlineNoteAdd size={45} />
       </div>
