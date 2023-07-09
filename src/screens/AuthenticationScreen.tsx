@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -70,7 +70,8 @@ function AuthenticationScreen() {
       });
   };
 
-  const handleButtonClick = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (
       !validateEmail(formState.email) &&
       !validatePassword(formState.password)
@@ -105,25 +106,35 @@ function AuthenticationScreen() {
     <>
       <div className="flexCenter h-screen">
         <div className="flexCenter flex-col w-[95%] h-[75%] bg-[#323a49] my-20 rounded-lg lg:w-[28%] md:w-[65%]">
-          <p className="text-4xl font-bold text-white mb-10 mt-5">Swift Note</p>
-          <form className="flexCenter flex-col" autoComplete="off">
+          <p className="text-5xl font-bold text-white mb-10 mt-5">Swift Note</p>
+          <form
+            className="flexCenter flex-col"
+            onSubmit={(e) => handleSubmit(e)}
+          >
             <InputField
-              label={"email"}
+              type="email"
+              label="email"
               placeholder={"john@doe.com"}
-              errorText={"Please enter correct email address!"}
+              errorText={"Please enter correct email address."}
               isError={formState.isError}
               value={formState.email}
               handleChange={handleChange}
             />
             <InputField
-              label={"password"}
+              type="password"
+              label="password"
               placeholder={"•••••••••"}
-              errorText={"Please enter correct password!"}
+              errorText={"Please enter correct password."}
               isError={formState.isError}
               value={formState.password}
               handleChange={handleChange}
             />
-            <Button handleButtonClick={handleButtonClick}>
+            <Button
+              type="submit"
+              handleButtonClick={(e: FormEvent<HTMLFormElement>) =>
+                handleSubmit(e)
+              }
+            >
               {formState.isLoading ? (
                 <AiOutlineLoading3Quarters
                   color={"white"}

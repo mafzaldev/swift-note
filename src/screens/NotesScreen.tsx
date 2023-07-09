@@ -104,7 +104,7 @@ function NotesScreen() {
         <MdOutlineNoteAdd size={45} />
       </div>
       <div className="flexCenter flex-col mx-10 my-10 gap-3 lg:mx-32 sm:mx-16">
-        <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+        <h1 className="mb-4 text-5xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl dark:text-white">
           Swift Note
         </h1>
         <form className="flex items-center mb-4 w-80 sm:w-96">

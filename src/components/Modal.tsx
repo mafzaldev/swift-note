@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import { useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { CSSTransition } from "react-transition-group";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
@@ -64,7 +64,8 @@ function ModalOverlay({
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (formState.title.length < 5 || formState.description.length < 15) {
       setFormState((values) => ({
         ...values,
@@ -90,7 +91,10 @@ function ModalOverlay({
           <ModalCloseButton handleModal={handleModal} />
           <div className="px-6 py-6 lg:px-8">
             <h3 className="mb-4 text-xl font-medium text-white">{mode}</h3>
-            <form className="flexCenter flex-col space-y-6" autoComplete="off">
+            <form
+              className="flexCenter flex-col space-y-6"
+              onSubmit={(e) => handleSubmit(e)}
+            >
               <InputField
                 label={"title"}
                 placeholder={"NodeJS Course"}
@@ -111,7 +115,12 @@ function ModalOverlay({
                 type="textarea"
                 handleChange={handleChange}
               />
-              <Button handleButtonClick={handleSubmit}>
+              <Button
+                type="submit"
+                handleButtonClick={(e: FormEvent<HTMLFormElement>) =>
+                  handleSubmit(e)
+                }
+              >
                 {formState.isLoading ? (
                   <AiOutlineLoading3Quarters
                     color={"white"}

@@ -1,13 +1,13 @@
 import { useId } from "react";
 
 export default function InputField({
+  type,
   label,
   errorText,
   placeholder,
   isError,
   value,
   width = 80,
-  type = "text",
   handleChange,
 }: InputField) {
   const fieldId = useId();
@@ -21,9 +21,9 @@ export default function InputField({
       >
         {label[0].toUpperCase() + label.slice(1)}
       </label>
-      {type === "text" ? (
+      {type !== "textarea" ? (
         <input
-          type="text"
+          type={type}
           id={fieldId}
           name={label}
           value={value}
