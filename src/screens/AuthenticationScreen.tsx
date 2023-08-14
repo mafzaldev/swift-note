@@ -1,25 +1,25 @@
-import { FormEvent, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
-import InputField from "../components/InputField";
 import Button from "../components/Button";
+import InputField from "../components/InputField";
 
 import { auth } from "../services/FirebaseConfig";
 import {
+  getLocalStorage,
+  setLocalStorage,
   validateEmail,
   validatePassword,
-  setLocalStorage,
-  getLocalStorage,
 } from "../services/Utils";
-import userStore from "../stores/UserStore";
+import useUserStore from "../stores/UserStore";
 
 function AuthenticationScreen() {
-  const { setCredentials } = userStore();
+  const { setCredentials } = useUserStore();
 
   const [formState, setFormState] = useState({
     email: "",
@@ -107,6 +107,7 @@ function AuthenticationScreen() {
       <div className="flexCenter h-screen">
         <div className="flexCenter flex-col w-[95%] h-[75%] bg-[#323a49] my-20 rounded-lg lg:w-[28%] md:w-[65%]">
           <p className="text-5xl font-bold text-white mb-10 mt-5">Swift Note</p>
+
           <form
             className="flexCenter flex-col"
             onSubmit={(e) => handleSubmit(e)}

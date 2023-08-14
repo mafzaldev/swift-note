@@ -1,21 +1,21 @@
+import { collection, onSnapshot, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { MdOutlineNoteAdd } from "react-icons/md";
 import { HiOutlineLogout } from "react-icons/hi";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { MdOutlineNoteAdd } from "react-icons/md";
 
-import NoteCard from "../components/NoteCard";
-import SearchField from "../components/SearchField";
 import Modal from "../components/Modal";
+import NoteCard from "../components/NoteCard";
 import NoteDetails from "../components/NoteDetails";
+import SearchField from "../components/SearchField";
 
-import userStore from "../stores/UserStore";
 import { auth, db } from "../services/FirebaseConfig";
-import { notesStore, Note } from "../stores/NotesStore";
 import { removeLocalStorage } from "../services/Utils";
+import { Note, useNotesStore } from "../stores/NotesStore";
+import useUserStore from "../stores/UserStore";
 
 function NotesScreen() {
-  const { setNotes, allNotes } = notesStore();
-  const { uid, setCredentials } = userStore();
+  const { setNotes, allNotes } = useNotesStore();
+  const { uid, setCredentials } = useUserStore();
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredNotes, setFilteredNotes] = useState<Note[]>([]);

@@ -11,7 +11,7 @@ interface NotesState {
     setNotes: (notes: Note[]) => void
 }
 
-const notesStore = create<NotesState>()((set) => ({
+const useNotesStore = create<NotesState>()((set) => ({
     allNotes: [],
     setNotes: (notes: Note[]) => {
         set({
@@ -20,5 +20,6 @@ const notesStore = create<NotesState>()((set) => ({
     }
 }))
 
-export { notesStore };
+export { useNotesStore };
 export type { Note };
+

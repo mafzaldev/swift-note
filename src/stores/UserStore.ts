@@ -7,7 +7,7 @@ interface UserState {
     setCredentials: (isAuthenticated: boolean, email: string, uid: string) => void
 }
 
-const userStore = create<UserState>()((set) => ({
+const useUserStore = create<UserState>()((set) => ({
     email: "",
     uid: "",
     isAuthenticated: false,
@@ -20,4 +20,4 @@ const userStore = create<UserState>()((set) => ({
     }
 }))
 
-export default userStore;
+export default useUserStore;
